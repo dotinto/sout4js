@@ -28,7 +28,7 @@ module.exports = {
     },
     // advanced methods
     traceAdv(message, thread, module) {
-        console.log(`${dateFormat()} [${thread}] \x1b[30mTRACE\x1b[0m ${module} - ${message}`)
+        console.log(`${dateFormat()} [${thread}] \x1b[30;47mTRACE\x1b[0m ${module} - ${message}`)
     },
     debugAdv(message, thread, module) {
         console.log(`${dateFormat()} [${thread}] \x1b[34mDEBUG\x1b[0m ${module} - ${message}`)
