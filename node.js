@@ -9,7 +9,7 @@ function dateFormat() {
 module.exports = {
     // simple methods
     trace(message) {
-        console.log(`${dateFormat()} \x1b[30mTRACE\x1b[0m - ${message}`)
+        console.log(`${dateFormat()} \x1b[30;47mTRACE\x1b[0m - ${message}`)
     },
     debug(message) {
         console.log(`${dateFormat()} \x1b[34mDEBUG\x1b[0m - ${message}`)
