@@ -1,8 +1,8 @@
 function dateFormat() {
     return `${new Date().getFullYear()}-${
-        (new Date().getMonth() < 10) ? "0" + new Date().getMonth() : new Date().getMonth()
+        (new Date().getMonth() < 10) ? "0" + (new Date().getMonth()+1) : new Date().getMonth()
     }-${
-        (new Date().getDay() < 10) ? "0" + new Date().getDay() : new Date().getDay()
+        (new Date().getDate() < 10) ? "0" + new Date().getDate() : new Date().getDate()
     } ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}.${new Date().getMilliseconds()}`
 }
 
