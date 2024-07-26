@@ -13,7 +13,17 @@ function dateFormat() {
         (new Date().getMinutes() < 10) ? "0" + new Date().getMinutes() : new Date().getMinutes()
     }:${
         (new Date().getSeconds() < 10) ? "0" + new Date().getSeconds() : new Date().getSeconds()
-    }.${(millis.length - 4)*"0"}${millis}`
+    }.${(() => {
+            switch (String(millis).length) {
+                case 1:
+                    return `00${millis}`;
+                case 2:
+                    return `0${millis}`;
+                case 3:
+                    return `${millis}`;
+            }
+        })()
+    }`
 }
 function dateFormatSimply() {
     return `${new Date().getFullYear()}${
