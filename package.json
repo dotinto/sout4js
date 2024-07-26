@@ -1,8 +1,9 @@
 {
     "name": "@dxtintx/sout4js",
-    "version": "2.0.2",
+    "version": "2.1.0",
     "description": "Package for convenient logging of any information to the console.",
     "main": "node.js",
+    "types": "types.d.ts",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1"
     },

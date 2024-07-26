@@ -62,7 +62,7 @@ module.exports = {
             fs.mkdirSync(logsPath)
         }
 
-        logFileStream = fs.createWriteStream(logsPath + '/' + dateFormatSimply() + '.log', { flags });
+        logFileStream = fs.createWriteStream(logsPath + '/' + dateFormatSimply() + '.log', flags);
         process.on('beforeExit', () => {
             logFileStream.close()
         })
