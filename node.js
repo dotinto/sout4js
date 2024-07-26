@@ -2,6 +2,7 @@ const fs = require('node:fs')
 const util = require("node:util")
 
 function dateFormat() {
+    var millis = new Date().getMilliseconds();
     return `${new Date().getFullYear()}-${
         (new Date().getMonth() < 10) ? "0" + (new Date().getMonth()+1) : new Date().getMonth()
     }-${
@@ -12,7 +13,7 @@ function dateFormat() {
         (new Date().getMinutes() < 10) ? "0" + new Date().getMinutes() : new Date().getMinutes()
     }:${
         (new Date().getSeconds() < 10) ? "0" + new Date().getSeconds() : new Date().getSeconds()
-    }.${new Date().getMilliseconds()}`
+    }.${(millis.length - 4)*"0"}${millis}`
 }
 function dateFormatSimply() {
     return `${new Date().getFullYear()}${
