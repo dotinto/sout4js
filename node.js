@@ -1,66 +1,9 @@
 const fs = require('node:fs')
-const util = require("node:util")
 
-function dateFormat() {
-    var millis = new Date().getMilliseconds();
-    return `${new Date().getFullYear()}-${
-        (new Date().getMonth() < 10) ? "0" + (new Date().getMonth()+1) : new Date().getMonth()
-    }-${
-        (new Date().getDate() < 10) ? "0" + new Date().getDate() : new Date().getDate()
-    } ${
-        (new Date().getHours() < 10) ? "0" + new Date().getHours() : new Date().getHours()
-    }:${
-        (new Date().getMinutes() < 10) ? "0" + new Date().getMinutes() : new Date().getMinutes()
-    }:${
-        (new Date().getSeconds() < 10) ? "0" + new Date().getSeconds() : new Date().getSeconds()
-    }.${(() => {
-            switch (String(millis).length) {
-                case 1:
-                    return `00${millis}`;
-                case 2:
-                    return `0${millis}`;
-                case 3:
-                    return `${millis}`;
-            }
-        })()
-    }`
-}
-function dateFormatSimply() {
-    return `${new Date().getFullYear()}${
-        (new Date().getMonth() < 10) ? "0" + (new Date().getMonth()+1) : new Date().getMonth()
-    }${
-        (new Date().getDate() < 10) ? "0" + new Date().getDate() : new Date().getDate()
-    }-${
-        (new Date().getHours() < 10) ? "0" + new Date().getHours() : new Date().getHours()
-    }${
-        (new Date().getMinutes() < 10) ? "0" + new Date().getMinutes() : new Date().getMinutes()
-    }${
-        (new Date().getSeconds() < 10) ? "0" + new Date().getSeconds() : new Date().getSeconds()
-    }`
-}
-
-function level(level) {
-    switch (level) {
-        case "trace":
-            return `\x1b[30;47mTRACE\x1b[0m`;
-        case "debug":
-            return `\x1b[34mDEBUG\x1b[0m`;
-        case "info":
-            return `\x1b[32mINFO \x1b[0m`;
-        case "warn":
-            return `\x1b[33mWARN \x1b[0m`;
-        case "error":
-            return `\x1b[31mERROR\x1b[0m`;
-        case "fatal":
-            return `\x1b[31mFATAL\x1b[0m`;
-        default:
-            break;
-    }
-}
+function dateFormat(){var e=new Date().getMilliseconds();return`${new Date().getFullYear()}-${10>new Date().getMonth()?"0"+(new Date().getMonth()+1):new Date().getMonth()}-${10>new Date().getDate()?"0"+new Date().getDate():new Date().getDate()} ${10>new Date().getHours()?"0"+new Date().getHours():new Date().getHours()}:${10>new Date().getMinutes()?"0"+new Date().getMinutes():new Date().getMinutes()}:${10>new Date().getSeconds()?"0"+new Date().getSeconds():new Date().getSeconds()}.${(()=>{switch(String(e).length){case 1:return`00${e}`;case 2:return`0${e}`;case 3:return`${e}`}})()}`}function dateFormatSimply(){return`${new Date().getFullYear()}${10>new Date().getMonth()?"0"+(new Date().getMonth()+1):new Date().getMonth()}${10>new Date().getDate()?"0"+new Date().getDate():new Date().getDate()}-${10>new Date().getHours()?"0"+new Date().getHours():new Date().getHours()}${10>new Date().getMinutes()?"0"+new Date().getMinutes():new Date().getMinutes()}${10>new Date().getSeconds()?"0"+new Date().getSeconds():new Date().getSeconds()}`}function level(e){switch(e){case"trace":return`\x1b[30;47mTRACE\x1b[0m`;case"debug":return`\x1b[34mDEBUG\x1b[0m`;case"info":return`\x1b[32mINFO \x1b[0m`;case"warn":return`\x1b[33mWARN \x1b[0m`;case"error":return`\x1b[31mERROR\x1b[0m`;case"fatal":return`\x1b[31mFATAL\x1b[0m`}}
 
 let isLoggerInitialized = false
 let logFileStream;
-
 
 module.exports = {
     logger(logsPath, flags) {
@@ -78,7 +21,7 @@ module.exports = {
             logFileStream.close()
         })
     },
-    // simple methods
+    
     trace(message) {
         console.log(`${dateFormat()} ${level("trace")} - ${message}`);
         (isLoggerInitialized) ? logFileStream.write(`
@@ -120,7 +63,7 @@ ${`${dateFormat()} ERROR - ${message}`}`) : null
 ${`${dateFormat()} FATAL - ${message}`}`) : null
     },
 
-    // advanced methods
+    
     traceAdv(message, thread, module) {
         console.log(`${dateFormat()} [${thread}] ${level("trace")} ${module} - ${message}`);
         
