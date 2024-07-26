@@ -18,11 +18,21 @@ sout4js contains only 12 text output methods: 6 regular ones and the same 6, but
 `error(message)`  
 `fatal(message)`  
 
-
-
 `traceAdv(message, thread, module)`  
 `debugAdv(message, thread, module)`  
 `infoAdv(message, thread, module)`  
 `warnAdv(message, thread, module)`  
 `errorAdv(message, thread, module)`  
 `fatalAdv(message, thread, module)`  
+
+#### Logger
+
+```js
+const sout4js = require("@dxtintx/sout4js")
+
+sout4js.logger("logs", { // path to log files
+  flags: "w" // default: "w"
+})
+
+// other code...
+```

@@ -1,6 +1,10 @@
 {
     "name": "@dxtintx/sout4js",
+<<<<<<< HEAD
     "version": "2.1.0",
+=======
+    "version": "2.0.3",
+>>>>>>> 4609b28223e55c1fbea4542f2474407ad3cf296c
     "description": "Package for convenient logging of any information to the console.",
     "main": "node.js",
     "types": "types.d.ts",
