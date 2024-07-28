@@ -1,6 +1,6 @@
 {
     "name": "@dxtintx/sout4js",
-    "version": "2.1.9",
+    "version": "2.1.10",
     "description": "Package for convenient logging of any information to the console.",
     "main": "node.js",
     "types": "types.d.ts",
@@ -12,7 +12,7 @@
       "url": "git+https://github.com/dotinto/sout4js.git"
     },
     "author": "dxtintx",
-    "license": "MIT",
+    "license": "Apache-2.0",
     "bugs": {
       "url": "https://github.com/dotinto/sout4js/issues"
     },
