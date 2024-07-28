@@ -1,10 +1,11 @@
-name: "publish npm"
-
+name: Publish Release
 on: push
-
 jobs:
-  publish:
+  npm-publish:
+    name: npm publish
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -15,13 +16,8 @@ jobs:
           node-version: 20
           registry-url: https://registry.npmjs.org/
 
-      - name: Login to npm
-        run: npm login --registry https://registry.npmjs.org --legacy-peer-deps
+      - name: Publish package
+        run: |
+          npm publish --provenance --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-
-      - name: Publish the package
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-        working-directory: .

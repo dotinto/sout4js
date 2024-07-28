@@ -6,15 +6,22 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
-        uses: actions/checkout@v2
-      - name: node
-        uses: actions/setup-node@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Node.js v20
+        uses: actions/setup-node@v4
         with:
-          node-version: 12
-          registry-url: https://registry.npmjs.org
-      - name: publish
-        run: npm publish --access public
-        working-directory: .
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+
+      - name: Login to npm
+        run: npm login --registry https://registry.npmjs.org --legacy-peer-deps
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+
+      - name: Publish the package
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+        working-directory: .
