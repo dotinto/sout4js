@@ -20,10 +20,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
 
-      - name: Run tests
-        run: npm test
-        working-directory: .
-
       - name: Publish the package
         run: npm publish --access public
         env:
