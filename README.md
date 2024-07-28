@@ -9,7 +9,7 @@ npm i @dxtintx/sout4js
 ```
 #### For web
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@dxtintx/sout4js@2.1.8/web.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@dxtintx/sout4js@2.1.9/web.js"></script>
 ```
 
 ## Usage
