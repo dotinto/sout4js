@@ -1,6 +1,6 @@
 {
     "name": "@dxtintx/sout4js",
-    "version": "2.3.1",
+    "version": "2.3.2",
     "description": "Package for convenient logging of any information to the console.",
     "main": "node.js",
     "types": "types.d.ts",
@@ -16,8 +16,5 @@
     "bugs": {
         "url": "https://github.com/dotinto/sout4js/issues"
     },
-    "homepage": "https://github.com/dotinto/sout4js#readme",
-    "dependencies": {
-        "@dxtintx/sout4js": "file:"
-    }
+    "homepage": "https://github.com/dotinto/sout4js#readme"
 }
