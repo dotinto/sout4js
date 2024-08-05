@@ -16,8 +16,5 @@
     "bugs": {
         "url": "https://github.com/dotinto/sout4js/issues"
     },
-    "homepage": "https://github.com/dotinto/sout4js#readme",
-    "dependencies": {
-        "@dxtintx/sout4js": "file:"
-    }
+    "homepage": "https://github.com/dotinto/sout4js#readme"
 }
