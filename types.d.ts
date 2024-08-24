@@ -1,5 +1,7 @@
 declare namespace sout4js {
-    type Flags = object;
+    interface Flags {
+        flags: string;
+    }
 
     function logger(logsPath: string, flags: Flags): void;
     function trace(message: string): void;
