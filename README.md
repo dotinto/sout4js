@@ -9,7 +9,9 @@ npm i @dxtintx/sout4js
 ```
 #### For web
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@dxtintx/sout4js/web.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@dxtintx/sout4js/web/web.js"></script>
+<!-- OR MINIFIED -->
+ <script src="https://cdn.jsdelivr.net/npm/@dxtintx/sout4js/web/web.min.js"></script>
 ```
 
 ## Usage
