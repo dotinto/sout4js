@@ -1,6 +1,6 @@
 # sout4js
 
-Package for convenient logging of any information to the console with Log4j format for JavaScript.
+Package that provide ability to advanced logging.
 
 ## Installation
 #### For Node.js
@@ -23,12 +23,12 @@ warn(message)
 error(message)  
 fatal(message)  
 
-traceAdv(message, thread, module)  
-debugAdv(message, thread, module)  
-infoAdv(message, thread, module)  
-warnAdv(message, thread, module)  
-errorAdv(message, thread, module)  
-fatalAdv(message, thread, module)  
+traceAdv(message, thread, module, useLegacyMethod = true)  
+debugAdv(message, thread, module, useLegacyMethod = true)  
+infoAdv(message, thread, module, useLegacyMethod = true)  
+warnAdv(message, thread, module, useLegacyMethod = true)  
+errorAdv(message, thread, module, useLegacyMethod = true)  
+fatalAdv(message, thread, module, useLegacyMethod = true)  
 ```
 
 #### Logger
