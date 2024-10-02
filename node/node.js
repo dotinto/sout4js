@@ -13,58 +13,58 @@ module.exports = {
     logger(logsPath, flags) {
         if (!logsPath) {
             throw new Error('"logsPath" is required');
-        }
-        isLoggerInitialized = true
+        };
+        isLoggerInitialized = true;
 
         if (!fs.existsSync(logsPath)) {
-            fs.mkdirSync(logsPath)
-        }
+            fs.mkdirSync(logsPath);
+        };
 
         logFileStream = fs.createWriteStream(logsPath + '/' + dateFormatSimply() + '.log', flags);
         process.on('beforeExit', () => {
-            logFileStream.close()
-        })
+            logFileStream.close();
+        });
     },
     
     trace(message) {
         console.log(`${dateFormat()} ${level("trace")} - ${message}`);
         (isLoggerInitialized) ? logFileStream.write(`
-${`${dateFormat()} TRACE - ${message}`}`) : null
+${`${dateFormat()} TRACE - ${message}`}`) : null;
     },
 
     debug(message) {
         console.log(`${dateFormat()} ${level("debug")} - ${message}`);
         
         (isLoggerInitialized) ? logFileStream.write(`
-${`${dateFormat()} DEBUG - ${message}`}`) : null
+${`${dateFormat()} DEBUG - ${message}`}`) : null;
     },
 
     info(message) {
         console.log(`${dateFormat()} ${level("info")} - ${message}`);
         
         (isLoggerInitialized) ? logFileStream.write(`
-${`${dateFormat()} INFO - ${message}`}`) : null
+${`${dateFormat()} INFO - ${message}`}`) : null;
     },
 
     warn(message) {
         console.log(`${dateFormat()} ${level("warn")} - ${message}`);
         
         (isLoggerInitialized) ? logFileStream.write(`
-${`${dateFormat()} WARN - ${message}`}`) : null
+${`${dateFormat()} WARN - ${message}`}`) : null;
     },
 
     error(message) {
         console.log(`${dateFormat()} ${level("error")} - ${message}`);
         
         (isLoggerInitialized) ? logFileStream.write(`
-${`${dateFormat()} ERROR - ${message}`}`) : null
+${`${dateFormat()} ERROR - ${message}`}`) : null;
     },
 
     fatal(message) {
         console.log(`${dateFormat()} ${level("fatal")} - ${message}`);
         
         (isLoggerInitialized) ? logFileStream.write(`
-${`${dateFormat()} FATAL - ${message}`}`) : null
+${`${dateFormat()} FATAL - ${message}`}`) : null;
     },
 
     
@@ -72,41 +72,41 @@ ${`${dateFormat()} FATAL - ${message}`}`) : null
         ((useLegacyMethod) ? console.trace : console.log )(`${dateFormat()} [${thread}] ${level("trace")} ${module} - ${message}`);
         
         (isLoggerInitialized) ? logFileStream.write(`
-${`${dateFormat()} [${thread}] TRACE ${module} - ${message}`}`) : null
+${`${dateFormat()} [${thread}] TRACE ${module} - ${message}`}`) : null;
     },
 
     debugAdv(message, thread, module, useLegacyMethod = true) {
         ((useLegacyMethod) ? console.debug : console.log )(`${dateFormat()} [${thread}] ${level("debug")} ${module} - ${message}`);
         
         (isLoggerInitialized) ? logFileStream.write(`
-${`${dateFormat()} [${thread}] DEBUG ${module} - ${message}`}`) : null
+${`${dateFormat()} [${thread}] DEBUG ${module} - ${message}`}`) : null;
     },
 
     infoAdv(message, thread, module, useLegacyMethod = true) {
         ((useLegacyMethod) ? console.info : console.log )(`${dateFormat()} [${thread}] ${level("info")} ${module} - ${message}`);
         
         (isLoggerInitialized) ? logFileStream.write(`
-${`${dateFormat()} [${thread}] INFO  ${module} - ${message}`}`) : null
+${`${dateFormat()} [${thread}] INFO  ${module} - ${message}`}`) : null;
     },
 
     warnAdv(message, thread, module, useLegacyMethod = true) {
         ((useLegacyMethod) ? console.warn : console.log )(`${dateFormat()} [${thread}] ${level("warn")} ${module} - ${message}`);
         
         (isLoggerInitialized) ? logFileStream.write(`
-${`${dateFormat()} [${thread}] WARN  ${module} - ${message}`}`) : null
+${`${dateFormat()} [${thread}] WARN  ${module} - ${message}`}`) : null;
     },
 
     errorAdv(message, thread, module, useLegacyMethod = true) {
         ((useLegacyMethod) ? console.error : console.log )(`${dateFormat()} [${thread}] ${level("error")} ${module} - ${message}`);
         
         (isLoggerInitialized) ? logFileStream.write(`
-${`${dateFormat()} [${thread}] ERROR ${module} - ${message}`}`) : null
+${`${dateFormat()} [${thread}] ERROR ${module} - ${message}`}`) : null;
     },
 
     fatalAdv(message, thread, module, useLegacyMethod = true) {
         ((useLegacyMethod) ? console.error : console.log )(`${dateFormat()} [${thread}] ${level("fatal")} ${module} - ${message}`);
         
         (isLoggerInitialized) ? logFileStream.write(`
-${`${dateFormat()} [${thread}] FATAL ${module} - ${message}`}`) : null
+${`${dateFormat()} [${thread}] FATAL ${module} - ${message}`}`) : null;
     },
 }
