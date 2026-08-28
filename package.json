@@ -24,6 +24,9 @@
       "require": "./web/web.js"
     }
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "node",
     "web",
