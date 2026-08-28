@@ -1,56 +1,292 @@
-const nd = new Date();
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define([], factory);
+    } else if (typeof module === 'object' && module.exports) {
+        module.exports = factory();
+    } else {
+        root.sout4js = factory();
+    }
+})(typeof globalThis !== 'undefined' ? globalThis : (typeof window !== 'undefined' ? window : this), function () {
+    'use strict';
 
-function dateFormat(){var e=nd.getMilliseconds();return`${nd.getFullYear()}-${10>nd.getMonth()?"0"+(nd.getMonth()+1):nd.getMonth()}-${10>nd.getDate()?"0"+nd.getDate():nd.getDate()} ${10>nd.getHours()?"0"+nd.getHours():nd.getHours()}:${10>nd.getMinutes()?"0"+nd.getMinutes():nd.getMinutes()}:${10>nd.getSeconds()?"0"+nd.getSeconds():nd.getSeconds()}.${(()=>{switch(String(e).length){case 1:return`00${e}`;case 2:return`0${e}`;case 3:return`${e}`}})()}`}
-function level(e){switch(e){case"trace":return`\x1b[30;47mTRACE\x1b[0m`;case"debug":return`\x1b[34mDEBUG\x1b[0m`;case"info":return`\x1b[32mINFO \x1b[0m`;case"warn":return`\x1b[33mWARN \x1b[0m`;case"error":return`\x1b[31mERROR\x1b[0m`;case"fatal":return`\x1b[31mFATAL\x1b[0m`}}
+    const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
 
-const sout4js = {
+    function getAutoThread() {
+        if (typeof window !== 'undefined') return 'main';
+        if (typeof self !== 'undefined' && self.name) return self.name;
+        return 'worker';
+    }
 
-    trace(message) {
-        console.log(`${dateFormat()} ${level("trace")} - ${message}`);
-    },
+    function getCallerModule() {
+        try {
+            const stack = new Error().stack;
+            if (stack) {
+                const lines = stack.split('\n');
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i];
+                    if (!line.includes('web.js') && !line.includes('web.min.js') && !line.includes('sout4js')) {
+                        const match = line.match(/(https?:\/\/[^\s\)\/]+\/)?([^\s\)\?#:]+)/);
+                        if (match && match[2]) {
+                            const parts = match[2].split('/');
+                            return parts[parts.length - 1] || 'app';
+                        }
+                    }
+                }
+            }
+        } catch (_) {}
+        return 'app';
+    }
 
-    debug(message) {
-        console.log(`${dateFormat()} ${level("debug")} - ${message}`);
-    },
+    const LOG_LEVELS = {
+        trace: 10,
+        debug: 20,
+        info: 30,
+        warn: 40,
+        error: 50,
+        fatal: 60,
+        silent: 100
+    };
 
-    info(message) {
-        console.log(`${dateFormat()} ${level("info")} - ${message}`);
-    },
+    const BROWSER_STYLES = {
+        trace: 'background: #64748b; color: #ffffff; padding: 1px 5px; border-radius: 3px; font-weight: 600; font-size: 11px;',
+        debug: 'background: #0284c7; color: #ffffff; padding: 1px 5px; border-radius: 3px; font-weight: 600; font-size: 11px;',
+        info: 'background: #16a34a; color: #ffffff; padding: 1px 5px; border-radius: 3px; font-weight: 600; font-size: 11px;',
+        warn: 'background: #d97706; color: #ffffff; padding: 1px 5px; border-radius: 3px; font-weight: 600; font-size: 11px;',
+        error: 'background: #dc2626; color: #ffffff; padding: 1px 5px; border-radius: 3px; font-weight: 600; font-size: 11px;',
+        fatal: 'background: #7f1d1d; color: #ffffff; padding: 1px 5px; border-radius: 3px; font-weight: bold; font-size: 11px;'
+    };
 
-    warn(message) {
-        console.log(`${dateFormat()} ${level("warn")} - ${message}`);
-    },
+    const ANSI_STYLES = {
+        trace: '\x1b[30;47mTRACE\x1b[0m',
+        debug: '\x1b[34mDEBUG\x1b[0m',
+        info: '\x1b[32mINFO \x1b[0m',
+        warn: '\x1b[33mWARN \x1b[0m',
+        error: '\x1b[31mERROR\x1b[0m',
+        fatal: '\x1b[31mFATAL\x1b[0m'
+    };
 
-    error(message) {
-        console.log(`${dateFormat()} ${level("error")} - ${message}`);
-    },
+    function dateFormat(date = new Date()) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        const h = String(date.getHours()).padStart(2, '0');
+        const min = String(date.getMinutes()).padStart(2, '0');
+        const s = String(date.getSeconds()).padStart(2, '0');
+        const ms = String(date.getMilliseconds()).padStart(3, '0');
+        return `${y}-${m}-${d} ${h}:${min}:${s}.${ms}`;
+    }
 
-    fatal(message) {
-        console.log(`${dateFormat()} ${level("fatal")} - ${message}`);
-    },
+    function dateFormatSimply(date = new Date()) {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        const h = String(date.getHours()).padStart(2, '0');
+        const min = String(date.getMinutes()).padStart(2, '0');
+        const s = String(date.getSeconds()).padStart(2, '0');
+        return `${y}${m}${d}-${h}${min}${s}`;
+    }
 
-    
-    traceAdv(message, thread, module, useLegacyMethod = true) {
-        ((useLegacyMethod) ? console.trace : console.log )(`${dateFormat()} [${thread}] ${level("trace")} ${module} - ${message}`);
-    },
+    function level(levelName, colored = true) {
+        const key = String(levelName).toLowerCase();
+        if (colored) {
+            return ANSI_STYLES[key] || levelName.toUpperCase();
+        }
+        return levelName.toUpperCase();
+    }
 
-    debugAdv(message, thread, module, useLegacyMethod = true) {
-        ((useLegacyMethod) ? console.debug : console.log )(`${dateFormat()} [${thread}] ${level("debug")} ${module} - ${message}`);
-    },
+    class WebLoggerInstance {
+        constructor(options = {}) {
+            this.options = {
+                minLevel: 'trace',
+                colors: true,
+                ...options
+            };
+            this.minLevelValue = LOG_LEVELS[String(this.options.minLevel).toLowerCase()] ?? LOG_LEVELS.trace;
+        }
 
-    infoAdv(message, thread, module, useLegacyMethod = true) {
-        ((useLegacyMethod) ? console.info : console.log )(`${dateFormat()} [${thread}] ${level("info")} ${module} - ${message}`);
-    },
+        setLevel(levelName) {
+            const key = String(levelName).toLowerCase();
+            if (LOG_LEVELS[key] !== undefined) {
+                this.options.minLevel = key;
+                this.minLevelValue = LOG_LEVELS[key];
+            }
+        }
 
-    warnAdv(message, thread, module, useLegacyMethod = true) {
-        ((useLegacyMethod) ? console.warn : console.log )(`${dateFormat()} [${thread}] ${level("warn")} ${module} - ${message}`);
-    },
+        _shouldLog(levelName) {
+            const value = LOG_LEVELS[levelName] ?? 0;
+            return value >= this.minLevelValue;
+        }
 
-    errorAdv(message, thread, module, useLegacyMethod = true) {
-        ((useLegacyMethod) ? console.error : console.log )(`${dateFormat()} [${thread}] ${level("error")} ${module} - ${message}`);
-    },
+        _log(levelName, consoleFn, args) {
+            if (!this._shouldLog(levelName)) return;
+            const ts = dateFormat();
+            const badgeKey = String(levelName).toLowerCase();
 
-    fatalAdv(message, thread, module, useLegacyMethod = true) {
-        ((useLegacyMethod) ? console.error : console.log )(`${dateFormat()} [${thread}] ${level("fatal")} ${module} - ${message}`);
-    },
-}
+            if (isBrowser && this.options.colors) {
+                const style = BROWSER_STYLES[badgeKey] || '';
+                const tag = levelName.toUpperCase();
+                consoleFn(`%c${ts}%c %c${tag}%c -`, 'color: #94a3b8; font-size: 11px;', '', style, '', ...args);
+            } else if (this.options.colors) {
+                const badge = ANSI_STYLES[badgeKey] || levelName.toUpperCase();
+                consoleFn(`${ts} ${badge} -`, ...args);
+            } else {
+                consoleFn(`${ts} ${levelName.toUpperCase()} -`, ...args);
+            }
+        }
+
+        _logAdv(levelName, message, thread, moduleName, useLegacyMethod = true, extraArgs = []) {
+            if (!this._shouldLog(levelName)) return;
+            const ts = dateFormat();
+            const badgeKey = String(levelName).toLowerCase();
+            const actualThread = (thread !== undefined && thread !== null) ? thread : getAutoThread();
+            const actualModule = (moduleName !== undefined && moduleName !== null) ? moduleName : getCallerModule();
+            const threadStr = `[${actualThread}] `;
+            const moduleStr = `${actualModule} `;
+            const allArgs = extraArgs.length > 0 ? [message, ...extraArgs] : [message];
+
+            let consoleFn = console.log;
+            if (useLegacyMethod) {
+                const consoleFnMap = {
+                    trace: console.trace,
+                    debug: console.debug,
+                    info: console.info,
+                    warn: console.warn,
+                    error: console.error,
+                    fatal: console.error
+                };
+                consoleFn = consoleFnMap[levelName] || console.log;
+            }
+
+            if (isBrowser && this.options.colors) {
+                const style = BROWSER_STYLES[badgeKey] || '';
+                const tag = levelName.toUpperCase();
+                consoleFn(`%c${ts}%c ${threadStr}%c${tag}%c ${moduleStr}-`, 'color: #94a3b8; font-size: 11px;', '', style, '', ...allArgs);
+            } else if (this.options.colors) {
+                const badge = ANSI_STYLES[badgeKey] || levelName.toUpperCase();
+                consoleFn(`${ts} ${threadStr}${badge} ${moduleStr}-`, ...allArgs);
+            } else {
+                consoleFn(`${ts} ${threadStr}${levelName.toUpperCase()} ${moduleStr}-`, ...allArgs);
+            }
+        }
+
+        trace(...args) {
+            this._log('trace', console.log, args);
+        }
+
+        debug(...args) {
+            this._log('debug', console.log, args);
+        }
+
+        info(...args) {
+            this._log('info', console.log, args);
+        }
+
+        warn(...args) {
+            this._log('warn', console.log, args);
+        }
+
+        error(...args) {
+            this._log('error', console.log, args);
+        }
+
+        fatal(...args) {
+            this._log('fatal', console.log, args);
+        }
+
+        traceAdv(message, thread, moduleName, useLegacyMethod = true, ...extraArgs) {
+            this._logAdv('trace', message, thread, moduleName, useLegacyMethod, extraArgs);
+        }
+
+        debugAdv(message, thread, moduleName, useLegacyMethod = true, ...extraArgs) {
+            this._logAdv('debug', message, thread, moduleName, useLegacyMethod, extraArgs);
+        }
+
+        infoAdv(message, thread, moduleName, useLegacyMethod = true, ...extraArgs) {
+            this._logAdv('info', message, thread, moduleName, useLegacyMethod, extraArgs);
+        }
+
+        warnAdv(message, thread, moduleName, useLegacyMethod = true, ...extraArgs) {
+            this._logAdv('warn', message, thread, moduleName, useLegacyMethod, extraArgs);
+        }
+
+        errorAdv(message, thread, moduleName, useLegacyMethod = true, ...extraArgs) {
+            this._logAdv('error', message, thread, moduleName, useLegacyMethod, extraArgs);
+        }
+
+        fatalAdv(message, thread, moduleName, useLegacyMethod = true, ...extraArgs) {
+            this._logAdv('fatal', message, thread, moduleName, useLegacyMethod, extraArgs);
+        }
+    }
+
+    const defaultWebLogger = new WebLoggerInstance();
+
+    function createLogger(options) {
+        return new WebLoggerInstance(options);
+    }
+
+    const sout4js = {
+        WebLoggerInstance,
+        createLogger,
+        LOG_LEVELS,
+        dateFormat,
+        dateFormatSimply,
+        level,
+        getAutoThread,
+        getCallerModule,
+
+        setLevel(levelName) {
+            defaultWebLogger.setLevel(levelName);
+        },
+
+        trace(...args) {
+            defaultWebLogger.trace(...args);
+        },
+
+        debug(...args) {
+            defaultWebLogger.debug(...args);
+        },
+
+        info(...args) {
+            defaultWebLogger.info(...args);
+        },
+
+        warn(...args) {
+            defaultWebLogger.warn(...args);
+        },
+
+        error(...args) {
+            defaultWebLogger.error(...args);
+        },
+
+        fatal(...args) {
+            defaultWebLogger.fatal(...args);
+        },
+
+        traceAdv(message, thread, moduleName, useLegacyMethod = true, ...extraArgs) {
+            defaultWebLogger.traceAdv(message, thread, moduleName, useLegacyMethod, ...extraArgs);
+        },
+
+        debugAdv(message, thread, moduleName, useLegacyMethod = true, ...extraArgs) {
+            defaultWebLogger.debugAdv(message, thread, moduleName, useLegacyMethod, ...extraArgs);
+        },
+
+        infoAdv(message, thread, moduleName, useLegacyMethod = true, ...extraArgs) {
+            defaultWebLogger.infoAdv(message, thread, moduleName, useLegacyMethod, ...extraArgs);
+        },
+
+        warnAdv(message, thread, moduleName, useLegacyMethod = true, ...extraArgs) {
+            defaultWebLogger.warnAdv(message, thread, moduleName, useLegacyMethod, ...extraArgs);
+        },
+
+        errorAdv(message, thread, moduleName, useLegacyMethod = true, ...extraArgs) {
+            defaultWebLogger.errorAdv(message, thread, moduleName, useLegacyMethod, ...extraArgs);
+        },
+
+        fatalAdv(message, thread, moduleName, useLegacyMethod = true, ...extraArgs) {
+            defaultWebLogger.fatalAdv(message, thread, moduleName, useLegacyMethod, ...extraArgs);
+        }
+    };
+
+    sout4js.default = sout4js;
+    return sout4js;
+});

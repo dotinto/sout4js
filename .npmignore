@@ -1,3 +1,8 @@
 .github
-node_modules
+test
 test.html
+test.js
+node_modules
+logs
+tmp_test_logs
+*.log
